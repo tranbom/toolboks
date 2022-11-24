@@ -17,6 +17,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from toolboks._version import __version__
 
+from toolboks.config import (
+    read_config
+)
+
 from toolboks.system import (
     context
 )
