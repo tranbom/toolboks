@@ -15,12 +15,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from toolboks._version import __version__
+from toolboks._version import __version__  # noqa: F401
 
-from toolboks.config import (
+from toolboks.config import (  # noqa: F401
     read_config
 )
 
-from toolboks.system import (
+from toolboks.system import (  # noqa: F401
     context
 )
