@@ -26,6 +26,7 @@ def context() -> types.SimpleNamespace:
     """Information about the current runtime and system environment"""
     system_context = types.SimpleNamespace()
 
+    system_context.cpu_count = os.cpu_count()
     system_context.hostname = platform.node()
     system_context.machine = platform.machine()
     system_context.os = sys.platform
