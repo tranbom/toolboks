@@ -16,12 +16,30 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from pathlib import Path
+from types import SimpleNamespace
 from typing import List, Optional
 
 from toolboks.system import getenv
 
 # Functions based on XDG Base Directory Specification:
 # https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+
+
+def base_dirs() -> SimpleNamespace:
+    """
+    Return SimpleNamespace object with base dirs according to the XDG base specification
+    """
+    xdg_dirs = SimpleNamespace()
+
+    xdg_dirs.cache_home = cache_home()
+    xdg_dirs.config_dirs = config_dirs()
+    xdg_dirs.config_home = config_home()
+    xdg_dirs.data_dirs = data_dirs()
+    xdg_dirs.data_home = data_home()
+    xdg_dirs.runtime_dir = runtime_dir()
+    xdg_dirs.state_home = state_home()
+
+    return xdg_dirs
 
 
 def cache_home() -> str:
