@@ -19,6 +19,7 @@ import os
 import platform
 import sys
 import types
+from typing import Optional
 
 
 def context() -> types.SimpleNamespace:
@@ -53,3 +54,34 @@ def context() -> types.SimpleNamespace:
         system_context.virtual_environment = None
 
     return system_context
+
+
+def getenv(key: str, fallback: str = '') -> Optional[str]:
+    """
+    Return the value of environment variable `key` or default to `fallback`
+    if the environment variable does not exist or if it has a blank value.
+
+    getenv is similar to os.getenv with one difference - this function
+    will default to the fallback value if the environment variable
+    is set with a blank value.
+
+    Example:
+    $ export TOOLBOKS_TEST=
+    $ python
+    > import os
+    > import toolboks as tb
+    > os.getenv('TOOLBOKS_TEST', 'fallback-value') will return ''
+    > tb.getenv('TOOLBOKS_TEST', 'fallback-value') will return 'fallback-value'
+    """
+    try:
+        value = os.environ[key]
+
+        if value:
+            return value
+
+        if fallback:
+            return fallback
+
+        return ''
+    except KeyError:
+        return fallback or None
