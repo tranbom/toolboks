@@ -19,7 +19,7 @@ import os
 import platform
 import sys
 import types
-from typing import Optional
+from typing import Optional, overload
 
 
 def context() -> types.SimpleNamespace:
@@ -56,7 +56,17 @@ def context() -> types.SimpleNamespace:
     return system_context
 
 
-def getenv(key: str, fallback: str = '') -> Optional[str]:
+@overload
+def getenv(key: str) -> Optional[str]:
+    ...
+
+
+@overload
+def getenv(key: str, fallback: str) -> str:
+    ...
+
+
+def getenv(key: str, fallback: str = ''):
     """
     Return the value of environment variable `key` or default to `fallback`
     if the environment variable does not exist or if it has a blank value.
