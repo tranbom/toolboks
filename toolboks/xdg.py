@@ -15,6 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+import configparser
 from pathlib import Path
 from types import SimpleNamespace
 from typing import List, Optional
@@ -90,6 +91,40 @@ def state_home() -> str:
     Return value of $XDG_STATE_HOME or default value '$HOME/.local/state'
     """
     return getenv('XDG_STATE_HOME', f"{user_home() / '.local' / 'state'}")
+
+
+def user_dirs() -> Optional[SimpleNamespace]:
+    """
+    Read $XDG_CONFIG_HOME/user-dirs.dirs if it exists.
+    Return SimpleNamespace object with all directories specified.
+    $HOME will be expanded.
+    """
+    xdg_dirs = SimpleNamespace()
+    user_dirs_path = config_home() + '/user-dirs.dirs'
+
+    if Path(user_dirs_path).is_file():
+        config = configparser.ConfigParser()
+        contents = '[user_dirs]\n'
+
+        with open(user_dirs_path, 'r', encoding='utf-8') as user_dirs_file:
+            contents += user_dirs_file.read()
+
+        config.read_string(contents)
+
+        section = config['user_dirs']
+
+        for key in section:
+            value = section[key]
+
+            key = key.replace('xdg_', '')
+            value = value.replace('$HOME', str(user_home()))
+            value = value.replace('"', '')
+
+            setattr(xdg_dirs, key, value)
+
+        return xdg_dirs
+
+    return None
 
 
 def user_home() -> Path:
