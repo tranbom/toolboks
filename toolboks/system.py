@@ -57,22 +57,6 @@ def context() -> types.SimpleNamespace:
     return system_context
 
 
-def filter_abs_path(path_str: str) -> str:
-    """
-    Return absolute paths present in string `path`. Any relative paths are removed.
-    `path` should use the Linux/Unix format for paths: 'path1' or 'path1:path2:path3'
-
-    If `path` only contains relative paths a blank str is returned.
-    """
-    paths = path_str.split(':')
-
-    for path in paths:
-        if not os.path.isabs(path):
-            paths.remove(path)
-
-    return ':'.join(paths)
-
-
 @overload
 def getenv(key: str) -> Optional[str]:
     ...

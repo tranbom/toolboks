@@ -20,7 +20,8 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import List, Optional
 
-from toolboks.system import filter_abs_path, getenv
+from toolboks.modifiers import filter_abs_path
+from toolboks.system import getenv
 
 # Functions based on XDG Base Directory Specification:
 # https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html

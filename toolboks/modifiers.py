@@ -15,22 +15,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from toolboks._version import __version__  # noqa: F401
+import os
 
-from toolboks.config import (  # noqa: F401
-    read_config
-)
 
-from toolboks.listlib import (  # noqa: F401
-    expand,
-    flatten,
-)
+def filter_abs_path(path_str: str) -> str:
+    """
+    Return absolute paths present in string `path`. Any relative paths are removed.
+    `path` should use the Linux/Unix format for paths: 'path1' or 'path1:path2:path3'
 
-from toolboks.modifiers import (  # noqa: F401
-    filter_abs_path,
-)
+    If `path` only contains relative paths a blank str is returned.
+    """
+    paths = path_str.split(':')
 
-from toolboks.system import (  # noqa: F401
-    context,
-    getenv,
-)
+    for path in paths:
+        if not os.path.isabs(path):
+            paths.remove(path)
+
+    return ':'.join(paths)
