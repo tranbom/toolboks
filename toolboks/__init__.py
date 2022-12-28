@@ -21,6 +21,11 @@ from toolboks.config import (  # noqa: F401
     read_config
 )
 
+from toolboks.listlib import (  # noqa: F401
+    expand,
+    flatten,
+)
+
 from toolboks.system import (  # noqa: F401
     context,
     filter_abs_path,
