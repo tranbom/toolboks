@@ -20,7 +20,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import List, Optional
 
-from toolboks.system import getenv
+from toolboks.system import filter_abs_path, getenv
 
 # Functions based on XDG Base Directory Specification:
 # https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
@@ -47,35 +47,55 @@ def cache_home() -> str:
     """
     Return value of $XDG_CACHE_HOME or default value '$HOME/.cache'
     """
-    return getenv('XDG_CACHE_HOME', f"{user_home() / '.cache'}")
+    return getenv(
+        'XDG_CACHE_HOME',
+        fallback=f"{user_home() / '.cache'}",
+        mod=filter_abs_path
+    )
 
 
 def config_dirs() -> List[str]:
     """
     Return value of $XDG_CONFIG_DIRS or default value ['/etc/xdg/']
     """
-    return getenv('XDG_CONFIG_DIRS', '/etc/xdg').split(':')
+    return getenv(
+        'XDG_CONFIG_DIRS',
+        fallback='/etc/xdg',
+        mod=filter_abs_path
+    ).split(':')
 
 
 def config_home() -> str:
     """
     Return value of $XDG_CONFIG_HOME or default value '$HOME/.config'
     """
-    return getenv('XDG_CONFIG_HOME', f"{user_home() / '.config'}")
+    return getenv(
+        'XDG_CONFIG_HOME',
+        fallback=f"{user_home() / '.config'}",
+        mod=filter_abs_path
+    )
 
 
 def data_dirs() -> List[str]:
     """
     Return value of $XDG_DATA_DIRS or default value ['/usr/local/share','/usr/share']
     """
-    return getenv('XDG_DATA_DIRS', '/usr/local/share:/usr/share').split(':')
+    return getenv(
+        'XDG_DATA_DIRS',
+        fallback='/usr/local/share:/usr/share',
+        mod=filter_abs_path
+    ).split(':')
 
 
 def data_home() -> str:
     """
     Return value of $XDG_DATA_HOME or default value '$HOME/.local/share'
     """
-    return getenv('XDG_DATA_HOME', f"{user_home() / '.local' / 'share'}")
+    return getenv(
+        'XDG_DATA_HOME',
+        fallback=f"{user_home() / '.local' / 'share'}",
+        mod=filter_abs_path
+    )
 
 
 def runtime_dir() -> Optional[str]:
@@ -83,14 +103,21 @@ def runtime_dir() -> Optional[str]:
     Return value of $XDG_RUNTIME_DIR. No default value specified.
     Application utilising this library should handle absence of value.
     """
-    return getenv('XDG_RUNTIME_DIR')
+    return getenv(
+        'XDG_RUNTIME_DIR',
+        mod=filter_abs_path
+    )
 
 
 def state_home() -> str:
     """
     Return value of $XDG_STATE_HOME or default value '$HOME/.local/state'
     """
-    return getenv('XDG_STATE_HOME', f"{user_home() / '.local' / 'state'}")
+    return getenv(
+        'XDG_STATE_HOME',
+        fallback=f"{user_home() / '.local' / 'state'}",
+        mod=filter_abs_path
+    )
 
 
 def user_dirs() -> Optional[SimpleNamespace]:

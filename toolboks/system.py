@@ -19,7 +19,7 @@ import os
 import platform
 import sys
 import types
-from typing import Optional, overload
+from typing import Callable, Optional, overload
 
 
 def context() -> types.SimpleNamespace:
@@ -57,23 +57,64 @@ def context() -> types.SimpleNamespace:
     return system_context
 
 
+def filter_abs_path(path_str: str) -> str:
+    """
+    Return absolute paths present in string `path`. Any relative paths are removed.
+    `path` should use the Linux/Unix format for paths: 'path1' or 'path1:path2:path3'
+
+    If `path` only contains relative paths a blank str is returned.
+    """
+    paths = path_str.split(':')
+
+    for path in paths:
+        if not os.path.isabs(path):
+            paths.remove(path)
+
+    return ':'.join(paths)
+
+
 @overload
 def getenv(key: str) -> Optional[str]:
     ...
 
 
 @overload
-def getenv(key: str, fallback: str) -> str:
+def getenv(key: str, *, fallback: str) -> str:
     ...
 
 
-def getenv(key: str, fallback: str = ''):
+@overload
+def getenv(key: str, *, fallback: str, mod: Callable[[str], str]) -> str:
+    ...
+
+
+@overload
+def getenv(
+    key: str,
+    *,
+    fallback: Optional[str],
+    mod: Callable[[str], str]
+) -> Optional[str]:
+    ...
+
+
+@overload
+def getenv(key: str, *, mod: Callable[[str], str]) -> Optional[str]:
+    ...
+
+
+def getenv(
+    key: str,
+    *,
+    fallback: Optional[str] = '',
+    mod: Optional[Callable[[str], str]] = None
+):
     """
     Return the value of environment variable `key` or default to `fallback`
     if the environment variable does not exist or if it has a blank value.
 
     getenv is similar to os.getenv with one difference - this function
-    will default to the fallback value if the environment variable
+    will default to the `fallback` value if the environment variable
     is set with a blank value.
 
     Example:
@@ -83,9 +124,17 @@ def getenv(key: str, fallback: str = ''):
     > import toolboks as tb
     > os.getenv('TOOLBOKS_TEST', 'fallback-value') will return ''
     > tb.getenv('TOOLBOKS_TEST', 'fallback-value') will return 'fallback-value'
+
+    getenv also accepts a modifier function for the parameter `mod`.
+    The modifier function must accept one str parameter and return a str.
+    The modifier function can be used to filter or modify the value
+    from the environment variable. `fallback` will be used if the result of the
+    `mod` function is blank.
     """
     try:
         value = os.environ[key]
+
+        value = mod(value) if mod else value
 
         if value:
             return value
