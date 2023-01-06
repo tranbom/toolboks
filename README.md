@@ -1,5 +1,14 @@
 # toolboks
 
+[![pipeline status](https://gitlab.com/toolboks/toolboks/badges/main/pipeline.svg)](https://gitlab.com/toolboks/toolboks/-/pipelines)
+[![coverage](https://gitlab.com/toolboks/toolboks/badges/main/coverage.svg)](https://gitlab.com/toolboks/toolboks/-/jobs)
+[![flake8](https://gitlab.com/toolboks/toolboks/-/jobs/artifacts/main/raw/flake8/flake8.svg?job=flake8:%20[3.11])](https://gitlab.com/toolboks/toolboks/-/jobs/)
+[![pylint](https://gitlab.com/toolboks/toolboks/-/jobs/artifacts/main/raw/pylint/pylint.svg?job=pylint:%20[3.11])](https://gitlab.com/toolboks/toolboks/-/jobs/)
+[![pytest](https://gitlab.com/toolboks/toolboks/-/jobs/artifacts/main/raw/pytest/pytest.svg?job=pytest:%20[3.11])](https://gitlab.com/toolboks/toolboks/-/jobs/)
+[![PyPi - Release](https://img.shields.io/pypi/v/toolboks)](https://pypi.org/project/toolboks/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/toolboks)](https://pypi.org/project/toolboks/)
+[![PyPI - License](https://img.shields.io/pypi/l/toolboks?color=blue)](https://pypi.org/project/toolboks/)
+
 toolboks is a lightweight utility library.
 
 
