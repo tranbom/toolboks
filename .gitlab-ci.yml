@@ -13,7 +13,7 @@ flake8:
     matrix:
       - PYTHON_VERSION: ["3.9", "3.10", "3.11"]
   script:
-    - pip install flake8 genbadge[flake8]
+    - pip install flake8 genbadge[flake8] pytest pytest-cov
     - mkdir ./flake8
     - flake8 toolboks/ --exit-zero --statistics --tee --output-file ./flake8/flake8stats.txt
     - genbadge flake8 -i ./flake8/flake8stats.txt -o ./flake8/flake8.svg
@@ -29,7 +29,7 @@ pylint:
     matrix:
       - PYTHON_VERSION: ["3.9", "3.10", "3.11"]
   script:
-    - pip install pylint pylint-exit anybadge
+    - pip install pylint pylint-exit anybadge pytest pytest-cov
     - mkdir ./pylint
     - pylint --output-format=text toolboks/ | tee ./pylint/pylint.log || pylint-exit $?
     - PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' ./pylint/pylint.log)
@@ -37,3 +37,37 @@ pylint:
   artifacts:
     paths:
       - ./pylint/
+
+pytest:
+  stage: Test
+  image: python:${PYTHON_VERSION}-bullseye
+  allow_failure: false
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.9", "3.10", "3.11"]
+  script:
+    - pip install pytest genbadge[tests]
+    - mkdir ./pytest
+    - python -m pytest . --junitxml=pytest/test_report.xml
+    - genbadge tests -i ./pytest/test_report.xml -o ./pytest/pytest.svg
+  artifacts:
+    paths:
+      - ./pytest/
+    reports:
+      junit: ./pytest/test_report.xml
+
+coverage:
+  stage: Test
+  script:
+    - pip install pytest pytest-cov
+    - coverage run -m pytest
+    - coverage report
+    - coverage xml -o coverage/coverage.xml
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    paths:
+      - ./coverage/
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: ./coverage/coverage.xml

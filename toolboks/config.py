@@ -18,21 +18,27 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import configparser
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Dict, Literal, overload
+from typing import Dict, Literal, Union, overload
 
 
 @overload
-def read_config(file: str, as_dict: Literal[False] = False) -> SimpleNamespace:
+def read_config(
+    file: str,
+    as_dict: Literal[False] = False
+) -> SimpleNamespace:  # pragma: no coverage
     ...
 
 
 @overload
-def read_config(file: str, as_dict: Literal[True]) -> Dict:
+def read_config(file: str, as_dict: Literal[True]) -> Dict:  # pragma: no coverage
     ...
 
 
 @overload
-def read_config(file: str, as_dict: bool) -> Dict | SimpleNamespace:
+def read_config(
+    file: str,
+    as_dict: bool
+) -> Union[Dict,  SimpleNamespace]:  # pragma: no coverage
     ...
 
 

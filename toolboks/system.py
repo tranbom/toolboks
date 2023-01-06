@@ -58,17 +58,22 @@ def context() -> types.SimpleNamespace:
 
 
 @overload
-def getenv(key: str) -> Optional[str]:
+def getenv(key: str) -> Optional[str]:  # pragma: no coverage
     ...
 
 
 @overload
-def getenv(key: str, *, fallback: str) -> str:
+def getenv(key: str, *, fallback: str) -> str:  # pragma: no coverage
     ...
 
 
 @overload
-def getenv(key: str, *, fallback: str, mod: Callable[[str], str]) -> str:
+def getenv(
+    key: str,
+    *,
+    fallback: str,
+    mod: Callable[[str], str]
+) -> str:  # pragma: no coverage
     ...
 
 
@@ -78,12 +83,16 @@ def getenv(
     *,
     fallback: Optional[str],
     mod: Callable[[str], str]
-) -> Optional[str]:
+) -> Optional[str]:  # pragma: no coverage
     ...
 
 
 @overload
-def getenv(key: str, *, mod: Callable[[str], str]) -> Optional[str]:
+def getenv(
+        key: str,
+        *,
+        mod: Callable[[str], str]
+) -> Optional[str]:  # pragma: no coverage
     ...
 
 
